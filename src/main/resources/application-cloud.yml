@@ -1,0 +1,6 @@
+spring:
+  data:
+    cassandra:
+      contact-points: 23.99.86.105
+      username: cassandra
+      password: qx4WTa2VC20O
