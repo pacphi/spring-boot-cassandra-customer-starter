@@ -7,7 +7,7 @@ import org.springframework.data.cassandra.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel="customers", path="customers")
-public interface CustomerRepository extends CassandraRepository<Customer> {
+public interface CustomerRepository extends CassandraRepository<Customer, String> {
 
 	@Query("select * from customer where firstname=?0")
 	public Customer findByFirstName(String firstName);

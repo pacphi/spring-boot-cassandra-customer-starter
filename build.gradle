@@ -1,6 +1,7 @@
 buildscript {
 	ext {
-		springBootVersion = '1.5.9.RELEASE'
+		azureVersion = '2.0.4'
+		springBootVersion = '2.0.4.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -14,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
 
 group = 'io.pivotal'
 version = '0.0.1-SNAPSHOT'
@@ -23,6 +25,11 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom "com.microsoft.azure:azure-spring-boot-bom:${azureVersion}"
+	}
+}
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
@@ -31,10 +38,12 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-hateoas')
     compile('org.springframework.data:spring-data-rest-hal-browser')
     compile('org.springframework.boot:spring-boot-starter-web')
-	compile('com.datastax.cassandra:cassandra-driver-core:3.3.2')
-	compile('io.netty:netty-codec:4.1.19.Final')
+	compile('com.datastax.cassandra:cassandra-driver-core:3.5.1')
+	compile('com.datastax.cassandra:cassandra-driver-mapping:3.5.1')
+	compile('com.datastax.cassandra:cassandra-driver-extras:3.5.1')
+	compile('io.netty:netty-codec:4.1.28.Final')
 	compile('com.google.guava:guava:19.0')
-	compileOnly('org.projectlombok:lombok:1.16.18')
+	compileOnly('org.projectlombok:lombok:1.18.2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.cassandraunit:cassandra-unit-spring:3.3.0.2')
+	testCompile('org.cassandraunit:cassandra-unit-spring:3.5.0.1')
 }

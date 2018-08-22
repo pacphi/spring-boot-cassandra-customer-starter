@@ -1,4 +1,15 @@
 spring:
   data:
     cassandra:
-      keyspace-name: mykeyspace
+      keyspace-name: customer-space
+
+---
+
+spring:
+  profiles: cloud
+  data:
+    cassandra:
+      ssl: true
+      contact-points: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_host_endpoint}
+      username: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_database_id}
+      password: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_master_key}

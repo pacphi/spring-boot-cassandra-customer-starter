@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @TestExecutionListeners(mergeMode = MergeMode.MERGE_WITH_DEFAULTS, listeners = {
 		OrderedCassandraTestExecutionListener.class })
 @SpringBootTest(properties = { "spring.data.cassandra.port=9142" })
-@CassandraDataSet(keyspace = "mykeyspace", value = "setup.cql")
+@CassandraDataSet(keyspace = "customer-space", value = "setup.cql")
 @EmbeddedCassandra(timeout = 60000)
 public class SpringBootCassandraCustomerStarterApplicationTests {
 
