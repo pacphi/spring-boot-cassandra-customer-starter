@@ -1,7 +1,7 @@
 buildscript {
 	ext {
-		azureVersion = '2.0.4'
-		springBootVersion = '2.0.4.RELEASE'
+		azureVersion = '2.0.6'
+		springBootVersion = '2.0.5.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -11,11 +11,11 @@ buildscript {
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin:'java'
+apply plugin:'eclipse'
+apply plugin:'idea'
+apply plugin:'org.springframework.boot'
+apply plugin:'io.spring.dependency-management'
 
 group = 'io.pivotal'
 version = '0.0.1-SNAPSHOT'
@@ -33,17 +33,18 @@ dependencyManagement {
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-data-cassandra')
-	compile('org.springframework.boot:spring-boot-starter-data-rest')
-    compile('org.springframework.boot:spring-boot-starter-hateoas')
-    compile('org.springframework.data:spring-data-rest-hal-browser')
-    compile('org.springframework.boot:spring-boot-starter-web')
-	compile('com.datastax.cassandra:cassandra-driver-core:3.5.1')
-	compile('com.datastax.cassandra:cassandra-driver-mapping:3.5.1')
-	compile('com.datastax.cassandra:cassandra-driver-extras:3.5.1')
-	compile('io.netty:netty-codec:4.1.28.Final')
+	compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile('io.projectreactor:reactor-core:3.2.1.RELEASE')
 	compile('com.google.guava:guava:19.0')
+	compile('commons-io:commons-io:2.6')
 	compileOnly('org.projectlombok:lombok:1.18.2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.cassandraunit:cassandra-unit-spring:3.5.0.1')
+	testCompile('org.cassandraunit:cassandra-unit:3.5.0.1')
+	testCompile('io.projectreactor:reactor-test:3.2.1.RELEASE')
+}
+
+bootRun {
+	// support passing -Dsystem.property=value to bootRun task
+	systemProperties = System.properties
 }

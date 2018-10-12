@@ -23,7 +23,7 @@ public class Customer {
 	private String lastName;
 
 	public Customer() {
-	    id = UUIDs.timeBased();
+		id = UUIDs.timeBased();
 	}
 
 	public Customer(UUID id, String firstName, String lastName) {
