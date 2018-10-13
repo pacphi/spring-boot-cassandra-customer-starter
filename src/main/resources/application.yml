@@ -10,6 +10,18 @@ spring:
   data:
     cassandra:
       ssl: true
-      contact-points: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_host_endpoint}
-      username: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_database_id}
-      password: ${vcap.services.azure-cosmosdb.credentials.cosmosdb_master_key}
+      contact-points: ${vcap.services.reactive-cassy-secrets.credentials.CONTACT_POINT}
+      port: ${vcap.services.reactive-cassy-secrets.credentials.PORT}
+      username: ${vcap.services.reactive-cassy-secrets.credentials.USERNAME}
+      password: ${vcap.services.reactive-cassy-secrets.credentials.PASSWORD}
+      
+---
+
+spring:
+  profiles: docker
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      port: 9042
+      username: cassandra
+      password: cassandra

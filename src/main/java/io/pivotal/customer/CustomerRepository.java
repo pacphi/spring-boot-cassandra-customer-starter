@@ -1,5 +1,7 @@
 package io.pivotal.customer;
 
+import java.util.UUID;
+
 import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.cassandra.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -7,7 +9,7 @@ import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-public interface CustomerRepository extends ReactiveCrudRepository<Customer, String> {
+public interface CustomerRepository extends ReactiveCrudRepository<Customer, UUID> {
 
 	/**
 	 * Derived query selecting by {@code lastName}.
@@ -16,6 +18,14 @@ public interface CustomerRepository extends ReactiveCrudRepository<Customer, Str
 	 * @return
 	 */
 	Flux<Customer> findByLastName(String lastName);
+	
+	/**
+	 * Derived query selecting by {@code firstName}.
+	 *
+	 * @param firstName
+	 * @return
+	 */
+	Flux<Customer> findByFirstName(String firstName);
 
 	/**
 	 * String query selecting one or more matching entities.
@@ -36,14 +46,14 @@ public interface CustomerRepository extends ReactiveCrudRepository<Customer, Str
 	Flux<Customer> findByLastName(Mono<String> lastName);
 
 	/**
-	 * Derived query selecting by {@code firstname} and {@code lastname}. {@code firstname} uses deferred resolution that
+	 * Derived query selecting by {@code firstname} and {@code lastName}. {@code firstName} uses deferred resolution that
 	 * does not require blocking to obtain the parameter value.
 	 *
-	 * @param firstname
-	 * @param lastname
+	 * @param firstName
+	 * @param lastName
 	 * @return
 	 */
 	@AllowFiltering
-	Flux<Customer> findByFirstNameAndLastName(Mono<String> firstName, String lastname);
+	Flux<Customer> findByFirstNameAndLastName(Mono<String> firstName, String lastName);
 
 }

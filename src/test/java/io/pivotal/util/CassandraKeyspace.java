@@ -100,7 +100,7 @@ public class CassandraKeyspace extends CassandraResource {
 		try {
 			this.cqlStatements = IOUtils.readLines(getClass().getClassLoader().getResourceAsStream(cqlResourcePath), "UTF-8");
 		} catch (IOException e) {
-			log.info(String.format("Could not load %s", cqlResourcePath));
+			log.info("Could not load {}", cqlResourcePath);
 		}
 	}
 
