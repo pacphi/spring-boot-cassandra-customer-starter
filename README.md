@@ -33,10 +33,15 @@ Build this project with Gradle
 gradle clean build
 ```
 
-If you're on a Mac you will want to execute the following instead
+If you're on a Mac you will want to execute the following (once) 
 
 ```bash
 ./install.sigar.macos.sh
+```
+
+and then
+
+```
 gradle clean build -Djava.library.path=$JAVA_LIBRARY_PATH:~/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:. -Ddebug
 ```
 
@@ -93,6 +98,8 @@ az account set --subscription 90c2a5c6-0aef-963d-b153-f44d21402d98
 az group create --name spring-data-experiments --location westus
 ```
 
+> Replace values for `--subscription`, `--name`, and `--location` above with your own.
+
 Visit the Azure portal in your browser, navigate to `Azure Cosmos DB`, and add a new instance
 
 ![Image from Azure portal illustrating how to create a new Cosmos DB instance](docs/new-cosmos-db-cassandra-instance.png)
@@ -138,7 +145,7 @@ To startup the application, execute
 
 ### Simple case 
 
-We'll fire up a local Docker instance of Cassandra then start the application 
+We'll fire up a local Docker instance of Cassandra, execute the [Keyspace](#keyspace-creation) and [Table](#table-creation) creation steps above, then start the application 
 
 ```bash
 docker run -d -p 9042:9042 -e CASSANDRA_HOST=127.0.0.1 \
@@ -152,8 +159,14 @@ gradle bootRun -Dspring.profiles.active=docker
 
 // TODO
 
+### with Kubernetes
+
+// TODO
+
 
 ## How to deploy to Pivotal Application Service
+
+These instructions assume that a Cassandra instance is available and was pre-provisioned "off-platform" (e.g., on PKS or Azure Cosmos DB).
 
 ### Authenticating
 
@@ -209,37 +222,39 @@ Current implementation supports
 ### POST /customers
 
 ```
-http POST :8080/customers firstName=Nick lastName=Fury
+http POST {host}:{port}/customers firstName=Nick lastName=Fury
 ```
 
 ### PUT /customers/{id}
 
 ```
-http PUT :8080/customers/f91116f0-cf20-11e8-b999-7fb395277057 firstName=Nick lastName=Gone
+http PUT {host}:{port}/customers/f91116f0-cf20-11e8-b999-7fb395277057 firstName=Nick lastName=Gone
 ```
 
 ### GET /customers/{id}
 
 ```
-http :8080/customers/f91116f0-cf20-11e8-b999-7fb395277057
+http {host}:{port}/customers/f91116f0-cf20-11e8-b999-7fb395277057
 ```
 
 ### GET /customers?lastName={lastName}&firstName={firstName}
 
 ```
-http :8080/customers?lastName=Gone
+http {host}:{port}/customers?lastName=Gone
+http {host}:{port}/customers?firstName=Nick
+http {host}:{port}/customers?lastName=Gone&firstName=Nick
 ```
 
 ### GET /stream/customers
 
 ```
-http :8080/stream/customers
+http {host}:{port}/stream/customers
 ```
 
 ### DELETE /customers/{id}
 
 ```
-http DELETE :8080/customers/f91116f0-cf20-11e8-b999-7fb395277057
+http DELETE {host}:{port}/customers/f91116f0-cf20-11e8-b999-7fb395277057
 ```
 
 

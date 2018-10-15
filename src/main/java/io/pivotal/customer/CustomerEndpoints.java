@@ -56,7 +56,7 @@ public class CustomerEndpoints {
 	}
 	
 	@PostMapping("/customers")
-	Mono<ResponseEntity<Resource<Customer>>> newCustomer(Customer customer) throws URISyntaxException {
+	Mono<ResponseEntity<Resource<Customer>>> newCustomer(@RequestBody Customer customer) throws URISyntaxException {
 		Mono<Customer> savedCustomer = repository.save(customer);
 		return savedCustomer.map(c -> 
 						ResponseEntity

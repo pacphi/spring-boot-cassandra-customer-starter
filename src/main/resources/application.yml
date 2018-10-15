@@ -2,7 +2,19 @@ spring:
   data:
     cassandra:
       keyspace-name: customers
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,metrics,loggers
 
+logging:
+  level:
+    com.datastax: DEBUG
+    org.springframework.data.cassandra: DEBUG
+    org.springframework.hateoas: DEBUG
+  
 ---
 
 spring:

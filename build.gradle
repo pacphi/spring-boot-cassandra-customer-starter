@@ -35,7 +35,9 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
 	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('org.springframework.boot:spring-boot-starter-hateoas')
+	compile('org.springframework.boot:spring-boot-starter-hateoas') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+	}
 	compile('io.projectreactor:reactor-core:3.2.1.RELEASE')
 	compile('com.google.guava:guava:19.0')
 	compile('commons-io:commons-io:2.6')
