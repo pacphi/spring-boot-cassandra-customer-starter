@@ -260,10 +260,13 @@ http DELETE {host}:{port}/customers/f91116f0-cf20-11e8-b999-7fb395277057
 
 ## Credits and further reading
 
+To those who've blazed trails...
+
 * [Building REST services with Spring](https://spring.io/guides/tutorials/rest/)
 * [Spring Data for Cassandra - Reference Documentation](https://docs.spring.io/spring-data/cassandra/docs/2.0.5.RELEASE/reference/html/)
 * [Cassandra with Java](https://www.baeldung.com/cassandra-with-java)
 * [Cannot execute this query as it might involve data filtering](https://medium.com/@sameira/spring-data-cassandra-cannot-execute-this-query-as-it-might-involve-data-filtering-377cb5afda68)
 * [Reactive Streams with Spring Data Cassandra](https://dzone.com/articles/reactive-streams-with-spring-data-cassandra)
 * [Spring Data Cassandra 2.0 - Reactive examples](https://github.com/spring-projects/spring-data-examples/tree/master/cassandra/reactive)
+* [Spring HATEOAS - API Evolution Example](https://github.com/spring-projects/spring-hateoas-examples/tree/master/api-evolution)
 * [Introduction to the Azure Cosmos DB Cassandra API](https://docs.microsoft.com/en-us/azure/cosmos-db/cassandra-introduction)
