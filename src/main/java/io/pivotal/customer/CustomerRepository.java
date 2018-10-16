@@ -1,18 +1,59 @@
 package io.pivotal.customer;
 
-import java.util.List;
+import java.util.UUID;
 
-import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.cassandra.repository.AllowFiltering;
 import org.springframework.data.cassandra.repository.Query;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-@RepositoryRestResource(collectionResourceRel="customers", path="customers")
-public interface CustomerRepository extends CassandraRepository<Customer> {
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-	@Query("select * from customer where firstname=?0")
-	public Customer findByFirstName(String firstName);
+public interface CustomerRepository extends ReactiveCrudRepository<Customer, UUID> {
 
-	@Query("select * from customer where lastname=?0")
-	public List<Customer> findByLastName(String lastName);
+	/**
+	 * Derived query selecting by {@code lastName}.
+	 *
+	 * @param lastName
+	 * @return
+	 */
+	Flux<Customer> findByLastName(String lastName);
+	
+	/**
+	 * Derived query selecting by {@code firstName}.
+	 *
+	 * @param firstName
+	 * @return
+	 */
+	Flux<Customer> findByFirstName(String firstName);
+
+	/**
+	 * String query selecting one or more matching entities.
+	 *
+	 * @param lastName
+	 * @return
+	 */
+	@Query("SELECT * FROM customer WHERE firstName = ?0 and lastName  = ?1 ALLOW FILTERING")
+	Flux<Customer> findByFirstNameInAndLastName(String firstName, String lastName);
+
+	/**
+	 * Derived query selecting by {@code lastName}. {@code lastName} uses deferred resolution that does not require
+	 * blocking to obtain the parameter value.
+	 *
+	 * @param lastName
+	 * @return
+	 */
+	Flux<Customer> findByLastName(Mono<String> lastName);
+
+	/**
+	 * Derived query selecting by {@code firstname} and {@code lastName}. {@code firstName} uses deferred resolution that
+	 * does not require blocking to obtain the parameter value.
+	 *
+	 * @param firstName
+	 * @param lastName
+	 * @return
+	 */
+	@AllowFiltering
+	Flux<Customer> findByFirstNameAndLastName(Mono<String> firstName, String lastName);
 
 }

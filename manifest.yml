@@ -1,10 +1,10 @@
 ---
 applications:
-- name: spring-boot-cassandra-customer-starter
-  memory: 1024M
+- name: reactive-cassy
+  memory: 1G
   random-route: true
   instances: 1
-  path: build/libs/spring-boot-cassandra-customer-starter-0.0.1-SNAPSHOT.jar
+  path: build/libs/reactive-cassy-0.0.1-SNAPSHOT.jar
   buildpack: java_buildpack_offline
   env:
     JAVA_OPTS: -Djava.security.egd=file:///dev/urandom

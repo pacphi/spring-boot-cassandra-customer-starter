@@ -1,4 +1,43 @@
 spring:
   data:
     cassandra:
-      keyspace-name: mykeyspace
+      keyspace-name: customers
+      
+  jackson:
+    default-property-inclusion: NON_NULL
+      
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,metrics,loggers
+
+logging:
+  level:
+    com.datastax: DEBUG
+    org.springframework.data.cassandra: DEBUG
+    org.springframework.hateoas: DEBUG
+  
+---
+
+spring:
+  profiles: cloud
+  data:
+    cassandra:
+      ssl: true
+      contact-points: ${vcap.services.reactive-cassy-secrets.credentials.CONTACT_POINT}
+      port: ${vcap.services.reactive-cassy-secrets.credentials.PORT}
+      username: ${vcap.services.reactive-cassy-secrets.credentials.USERNAME}
+      password: ${vcap.services.reactive-cassy-secrets.credentials.PASSWORD}
+      
+---
+
+spring:
+  profiles: docker
+  data:
+    cassandra:
+      contact-points: 127.0.0.1
+      port: 9042
+      username: cassandra
+      password: cassandra

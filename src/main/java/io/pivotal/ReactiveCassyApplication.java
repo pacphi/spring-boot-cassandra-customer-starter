@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringBootCassandraCustomerStarterApplication {
+public class ReactiveCassyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootCassandraCustomerStarterApplication.class, args);
+		SpringApplication.run(ReactiveCassyApplication.class, args);
 	}
 }
