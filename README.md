@@ -1,5 +1,7 @@
 # Reactive Cassandra Example
 
+[![Build Status](https://travis-ci.org/pacphi/reactive-cassy.svg)](https://travis-ci.org/pacphi/reactive-cassy) [![Known Vulnerabilities](https://snyk.io/test/github/pacphi/reactive-cassy/badge.svg)](https://snyk.io/test/github/pacphi/reactive-cassy)
+
 This project explores the [Reactive Cassandra Support](https://docs.spring.io/spring-data/cassandra/docs/2.1.0.RELEASE/reference/html/#cassandra.reactive) in [Spring Data Cassandra](https://spring.io/projects/spring-data-cassandra), specifically: how to implement a [reactive repository](https://docs.spring.io/spring-data/cassandra/docs/2.1.0.RELEASE/reference/html/#cassandra.reactive.repositories), author integration tests, configuring the app to run locally against a [Docker image](https://hub.docker.com/r/bitnami/cassandra/) of Cassandra, and deploying the app to [Pivotal Application Service](https://pivotal.io/platform/pivotal-application-service) interacting with an Azure CosmosDB instance via the [Cassandra API](https://docs.microsoft.com/en-us/azure/cosmos-db/cassandra-introduction).
 
 
