@@ -38,6 +38,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-hateoas') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
 	}
+	compile('org.atteo:evo-inflector:1.2.2')
 	compile('io.projectreactor:reactor-core:3.2.1.RELEASE')
 	compile('com.google.guava:guava:19.0')
 	compile('commons-io:commons-io:2.6')
