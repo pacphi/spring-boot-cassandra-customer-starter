@@ -12,6 +12,7 @@ This project explores the [Reactive Cassandra Support](https://docs.spring.io/sp
 * [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) 2.0.46 or better
 * [CF CLI](https://github.com/cloudfoundry/cli#downloads) 6.40.0 or better if you want to push the application to a Cloud Foundry (CF) instance
 * [httpie](https://httpie.org/#installation) 0.9.9 or better to simplify interaction with API endpoints
+* [jq](https://stedolan.github.io/jq/) 1.5 or better
 * Java [JDK](https://openjdk.java.net/install/) 1.8u172 or better to compile and run the code
 * [Gradle](https://gradle.org/releases/) 4.8.1 or better to build and package source code
 * Docker for [Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac) or [Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) for spinning up a local instance of Cassandra and [cassandra-web](https://hub.docker.com/r/metavige/cassandra-web/) (an administration interface)
@@ -31,7 +32,7 @@ git clone https://github.com/pacphi/reactive-cassy.git
 Build this project with Gradle
 
 
-```bash
+```
 gradle clean build
 ```
 

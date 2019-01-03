@@ -1,34 +1,56 @@
 package io.pivotal.customer;
 
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.time.Duration;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.CassandraContainer;
 
-import io.pivotal.util.CassandraKeyspace;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(
+    initializers = { ReactiveCassandraTemplateIntegrationTest.TestContainerInitializer.class })
 public class ReactiveCassandraTemplateIntegrationTest {
 
-	@ClassRule public final static CassandraKeyspace CASSANDRA_KEYSPACE = CassandraKeyspace.onLocalhost("customers", "cql/simple.cql");
+	private static CassandraContainer container = 
+			(CassandraContainer) new CassandraContainer()
+				.withInitScript("cql/simple.cql")
+				.withStartupTimeout(Duration.ofMinutes(2));
 	
 	@Autowired private ReactiveCassandraTemplate template;
 
+	@BeforeAll
+    public static void startup() {
+        container.start();
+    }
+
+    @AfterAll
+    public static void shutdown() {
+        container.stop();
+    }
+    
 	/**
 	 * Truncate table and insert some rows.
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() {
-
 		Flux<Customer> truncateAndInsert = template.truncate(Customer.class)
 				.thenMany(Flux.just(new Customer().withFirstName("Nick").withLastName("Fury"),
 						new Customer().withFirstName("Tony").withLastName("Stark"),
@@ -57,5 +79,20 @@ public class ReactiveCassandraTemplateIntegrationTest {
 
 		StepVerifier.create(saveAndCount).expectNext(6L).verifyComplete();
 	}
+	
+	static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertyValues
+                .of(
+                    "spring.data.cassandra.username=" + container.getUsername(),
+                    "spring.data.cassandra.password=" + container.getPassword(),
+                    "spring.data.cassandra.contact-points=" + container.getContainerIpAddress(),
+                    "spring.data.cassandra.port=" + container.getMappedPort(9042)
+
+                )
+                .applyTo(applicationContext.getEnvironment());
+        }
+    }
 }

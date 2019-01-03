@@ -5,3 +5,4 @@ spring:
       schema-action: recreate
       contact-points:
       - 127.0.0.1
+      

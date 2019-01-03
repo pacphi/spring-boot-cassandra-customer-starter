@@ -10,8 +10,14 @@ spring:
 management:
   endpoints:
     web:
-      exposure:
+      exposure: 
         include: info,health,metrics,loggers
+  endpoint:
+    health:
+      show-details: always
+  info:
+    git:
+      mode: full
 
 logging:
   level:

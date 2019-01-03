@@ -1,31 +1,55 @@
 package io.pivotal.customer;
 
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import java.time.Duration;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.CassandraContainer;
 
-import io.pivotal.util.CassandraKeyspace;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@ContextConfiguration(
+    initializers = { ReactiveCustomerRepositoryIntegrationTest.TestContainerInitializer.class })
 public class ReactiveCustomerRepositoryIntegrationTest {
 
-	@ClassRule public final static CassandraKeyspace CASSANDRA_KEYSPACE = CassandraKeyspace.onLocalhost("customers", "cql/simple.cql");
+	private static CassandraContainer container = 
+			(CassandraContainer) new CassandraContainer()
+				.withInitScript("cql/simple.cql")
+				.withExposedPorts(9042)
+				.withStartupTimeout(Duration.ofMinutes(2));
 	
 	@Autowired CustomerRepository repository;
 
+	@BeforeAll
+    public static void startup() {
+        container.start();
+    }
+
+    @AfterAll
+    public static void shutdown() {
+        container.stop();
+    }
+    
 	/**
 	 * Clear table and insert some rows.
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() {
 		
 		Flux<Customer> deleteAndInsert = repository.deleteAll() 
@@ -41,7 +65,7 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 	/**
 	 * This sample performs a count, inserts data and performs a count again using reactive operator chaining.
 	 */
-	//@Test
+	@Test
 	public void shouldInsertAndCountData() {
 
 		Mono<Long> saveAndCount = repository.count()
@@ -70,15 +94,16 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 	/**
 	 * Fetch data using query derivation.
 	 */
-	//@Test
+	@Test
+	@Disabled
 	public void shouldQueryDataWithQueryDerivation() {
-		StepVerifier.create(repository.findByLastName("B")).expectNextCount(1).verifyComplete();
+		StepVerifier.create(repository.findByLastName("Banner")).expectNextCount(1).verifyComplete();
 	}
 
 	/**
 	 * Fetch data using a string query.
 	 */
-	//@Test
+	@Test
 	public void shouldQueryDataWithStringQuery() {
 		StepVerifier.create(repository.findByFirstNameInAndLastName("Tony", "Stark")).expectNextCount(1).verifyComplete();
 	}
@@ -86,7 +111,8 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 	/**
 	 * Fetch data using query derivation.
 	 */
-	//@Test
+	@Test
+	@Disabled
 	public void shouldQueryDataWithDeferredQueryDerivation() {
 		StepVerifier.create(repository.findByLastName(Mono.just("Fury"))).expectNextCount(1).verifyComplete();
 	}
@@ -94,12 +120,27 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 	/**
 	 * Fetch data using query derivation and deferred parameter resolution.
 	 */
-	//@Test
+	@Test
 	public void shouldQueryDataWithMixedDeferredQueryDerivation() {
 
 		StepVerifier.create(repository.findByFirstNameAndLastName(Mono.just("Bruce"), "Banner"))
 				.expectNextCount(1)
 				.verifyComplete();
 	}
+	
+	static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(ConfigurableApplicationContext applicationContext) {
+            TestPropertyValues
+                .of(
+                    "spring.datasource.username=" + container.getUsername(),
+                    "spring.datasource.password=" + container.getPassword(),
+                    "spring.data.cassandra.contact-points=" + container.getContainerIpAddress(),
+                    "spring.data.cassandra.port=" + container.getMappedPort(9042)
+                )
+                .applyTo(applicationContext.getEnvironment());
+        }
+    }
 
 }

@@ -1,3 +1,4 @@
+CREATE KEYSPACE IF NOT EXISTS customers WITH replication = {'class': 'SimpleStrategy', 'replication_factor': '1' };
 USE customers;
 DROP TABLE IF EXISTS customer;
 DROP INDEX IF EXISTS customerfirstnameindex;
