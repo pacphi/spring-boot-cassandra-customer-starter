@@ -53,10 +53,10 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 	public void setUp() {
 		
 		Flux<Customer> deleteAndInsert = repository.deleteAll() 
-				.thenMany(Flux.just(new Customer().withFirstName("Nick").withLastName("Fury"),
-                new Customer().withFirstName("Tony").withLastName("Stark"),
-                new Customer().withFirstName("Bruce").withLastName("Banner"),
-                new Customer().withFirstName("Peter").withLastName("Parker")))
+				.thenMany(Flux.just(Customer.builder().withFirstName("Nick").withLastName("Fury").build(),
+                Customer.builder().withFirstName("Tony").withLastName("Stark").build(),
+                Customer.builder().withFirstName("Bruce").withLastName("Banner").build(),
+                Customer.builder().withFirstName("Peter").withLastName("Parker").build()))
 				.flatMap(c -> repository.save(c));
 
 		StepVerifier.create(deleteAndInsert).expectNextCount(4).verifyComplete();
@@ -70,8 +70,8 @@ public class ReactiveCustomerRepositoryIntegrationTest {
 
 		Mono<Long> saveAndCount = repository.count()
 				.doOnNext(System.out::println)
-				.thenMany(repository.saveAll(Flux.just(new Customer().withFirstName("Stephen").withLastName("Strange"),
-				new Customer().withFirstName("Carol").withLastName("Danvers"))))
+				.thenMany(repository.saveAll(Flux.just(Customer.builder().withFirstName("Stephen").withLastName("Strange").build(),
+				Customer.builder().withFirstName("Carol").withLastName("Danvers").build())))
 				.last()
 				.flatMap(v -> repository.count())
 				.doOnNext(System.out::println);

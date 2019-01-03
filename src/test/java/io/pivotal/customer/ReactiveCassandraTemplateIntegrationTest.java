@@ -52,10 +52,10 @@ public class ReactiveCassandraTemplateIntegrationTest {
 	@BeforeEach
 	public void setUp() {
 		Flux<Customer> truncateAndInsert = template.truncate(Customer.class)
-				.thenMany(Flux.just(new Customer().withFirstName("Nick").withLastName("Fury"),
-						new Customer().withFirstName("Tony").withLastName("Stark"),
-						new Customer().withFirstName("Bruce").withLastName("Banner"),
-						new Customer().withFirstName("Peter").withLastName("Parker")))
+				.thenMany(Flux.just(Customer.builder().withFirstName("Nick").withLastName("Fury").build(),
+						Customer.builder().withFirstName("Tony").withLastName("Stark").build(),
+						Customer.builder().withFirstName("Bruce").withLastName("Banner").build(),
+						Customer.builder().withFirstName("Peter").withLastName("Parker").build()))
 				.flatMap(template::insert);
 
 		StepVerifier.create(truncateAndInsert).expectNextCount(4).verifyComplete();
@@ -70,8 +70,8 @@ public class ReactiveCassandraTemplateIntegrationTest {
 
 		Mono<Long> saveAndCount = template.count(Customer.class)
 				.doOnNext(System.out::println)
-				.thenMany(Flux.just(new Customer().withFirstName("Stephen").withLastName("Strange"),
-				new Customer().withFirstName("Carol").withLastName("Danvers")))
+				.thenMany(Flux.just(Customer.builder().withFirstName("Stephen").withLastName("Strange").build(),
+				Customer.builder().withFirstName("Carol").withLastName("Danvers").build()))
 				.flatMap(template::insert)
 				.last()
 				.flatMap(v -> template.count(Customer.class))
