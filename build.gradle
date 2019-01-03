@@ -68,7 +68,6 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-actuator')
 	implementation('org.springframework.boot:spring-boot-starter-data-cassandra-reactive')
@@ -99,3 +98,5 @@ bootRun {
 	// support passing -Dsystem.property=value to bootRun task
 	systemProperties = System.properties
 }
+
+check.dependsOn jacocoTestReport
