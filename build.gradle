@@ -77,7 +77,7 @@ dependencies {
 	}
 	implementation('org.atteo:evo-inflector:1.2.2')
 	implementation('io.projectreactor:reactor-core:3.2.3.RELEASE')
-	implementation('com.google.guava:guava:19.0')
+	implementation('com.google.guava:guava:23.0')
 	implementation('commons-io:commons-io:2.6')
 	implementation('org.apache.commons:commons-lang3:3.8.1')
 	testImplementation('org.junit.jupiter:junit-jupiter-api:5.3.1')
